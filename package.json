@@ -1,0 +1,87 @@
+{
+  "name": "xpatherized",
+  "displayName": "XPatherized",
+  "description": "Formatting and syntax highlighting for xpath queries",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.109.0"
+  },
+  "categories": [
+    "Other"
+  ],
+"activationEvents": [
+    "onLanguage:xpath"
+],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "xpatherized.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "xpatherized.minify",
+        "title": "Minify XPath"
+      },
+            {
+        "command": "xpatherized.testFormat",
+        "title": "Test XPath Formatter"
+      }
+    ],  
+    "languages": [
+    {
+      "id": "xpath",
+      "extensions": [".xpath"]
+    }
+  ],
+      "keybindings": [
+        {
+            "command": "xpatherized.formatAndSave",
+            "key": "cmd+s",
+            "when": "editorLangId == xpath"
+        }
+    ],
+"semanticTokenScopes": [
+    {
+        "language": "xpath",
+        "scopes": {
+            "keyword": ["keyword.control.xpath"],
+            "function": ["entity.name.function.xpath"],
+            "operator": ["keyword.operator.comparison.xpath"],
+            "string": ["string.quoted.xpath"],
+            "variable": ["variable.other.attribute.xpath"],
+            "number": ["constant.numeric.xpath"],
+            "class": ["entity.name.class.xpath"],
+            "punctuation": ["punctuation.definition.bracket.xpath"]
+        }
+    }
+]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "publish": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.109.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.54.0",
+    "eslint": "^9.39.2",
+    "esbuild": "^0.27.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
