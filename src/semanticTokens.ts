@@ -14,14 +14,16 @@ const tokenTypes = [
 export const legend = new vscode.SemanticTokensLegend(tokenTypes);
 
 function classifyToken(token: string): number {
-    if (token === "and" || token === "or") return 0;
-    if (token === "not") return 1;
-    if (/^(=|!=|<=|>=|<|>)$/.test(token)) return 2;
-    if (/^["']/.test(token)) return 3;
-    if (token.startsWith("@")) return 4;
-    if (/^\d+(\.\d+)?$/.test(token)) return 5;
-    if (/^[[\]()]$/.test(token)) return 7;
-    return 6; // property — paths, separators, element names
+    if (token === "and" || token === "or") return 0; // keyword
+    if (token === "not") return 1; // function
+    if (/^(=|!=|<=|>=|<|>)$/.test(token)) return 2; // operator
+    if (/^["']/.test(token)) return 3; // string
+    if (token.startsWith("@")) return 4; // variable
+    if (/^\d+(\.\d+)?$/.test(token)) return 5; // number
+    if (/^[[\]()]$/.test(token)) return 7; // punctuation
+    if (token === ",") return 7; // punctuation
+    if (/^[\w][\w.\-]*$/.test(token) && token.includes("-")) return 1; // function (contains-hyphen)
+    return 6; // class — paths, separators, element names
 }
 
 export class XPathSemanticTokensProvider implements vscode.DocumentSemanticTokensProvider {

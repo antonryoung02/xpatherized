@@ -9,7 +9,7 @@ export function format(document: vscode.TextDocument): vscode.TextEdit[] {
 
 function tokenize(xpath: string): string[] {
     const regex =
-        /(not(?=\s*\()|\[|\]|\(|\)|and\b|or\b|\/\/|\/|@[\w]+|[\w.:*]+|=|!=|<=|>=|<|>|"[^"]*"|'[^']*')/g;
+        /(not(?=\s*\()|\[|\]|\(|\)|and\b|or\b|\/\/|\/|@[\w-]+|[\w.\-:*]+|=|!=|<=|>=|<|>|,|"[^"]*"|'[^']*')/g;
     return xpath.match(regex)?.filter((t) => t.trim() !== "") ?? [];
 }
 
@@ -88,9 +88,15 @@ function formatTokens(tokens: string[], indent: number): string {
                 i++;
                 continue;
             }
-
             const inner = tokens.slice(i + 1, end);
-            if (isComplex(tokens, i, "(", ")")) {
+            const prevToken = i > 0 ? tokens[i - 1] : "";
+            const isFunction =
+                /^[\w.\-]+$/.test(prevToken) && prevToken !== "and" && prevToken !== "or";
+
+            if (isFunction) {
+                result +=
+                    "(" + inner.join(" ").replace(/ , /g, ", ").replace(/ +/g, " ").trim() + ")";
+            } else if (isComplex(tokens, i, "(", ")")) {
                 result += "(\n" + formatTokens(inner, indent + 1) + "\n" + tabs + ")";
             } else {
                 result += "(" + formatTokens(inner, indent) + ")";
@@ -98,6 +104,9 @@ function formatTokens(tokens: string[], indent: number): string {
             i = end + 1;
         } else if (t === "and" || t === "or") {
             result += "\n" + tabs + t + " ";
+            i++;
+        } else if (t === ",") {
+            result += ", ";
             i++;
         } else {
             if (result === "" || result.endsWith("\n")) {
