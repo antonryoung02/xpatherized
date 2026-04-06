@@ -2,7 +2,7 @@
   "name": "xpatherized",
   "displayName": "XPatherized",
   "description": "Formatting and syntax highlighting for xpath queries",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.105.0"
   },

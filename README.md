@@ -7,3 +7,11 @@ Commands:
 Command Palette > Minify XPath
 
 - Saves the minified version of your .xpath file to clipboard
+
+# Development
+
+- npm compile
+- run debugger on `extension.ts`
+
+- update package.json
+- npm run publish

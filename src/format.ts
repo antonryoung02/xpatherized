@@ -71,10 +71,11 @@ function formatTokens(tokens: string[], indent: number): string {
 
                 const inner = tokens.slice(parenStart + 1, end);
                 const innerFormatted = formatTokens(inner, indent + 1);
+                const prefix = result === "" || result.endsWith("\n") ? tabs : "";
                 if (innerFormatted.includes("\n")) {
-                    result += "not(\n" + innerFormatted + "\n" + tabs + ")";
+                    result += prefix + "not(\n" + innerFormatted + "\n" + tabs + ")";
                 } else {
-                    result += "not(" + inner.join("") + ")";
+                    result += prefix + "not(" + inner.join("") + ")";
                 }
                 i = end + 1;
             } else {
@@ -94,8 +95,7 @@ function formatTokens(tokens: string[], indent: number): string {
                 /^[\w.\-]+$/.test(prevToken) && prevToken !== "and" && prevToken !== "or";
 
             if (isFunction) {
-                result +=
-                    "(" + inner.join(" ").replace(/ , /g, ", ").replace(/ +/g, " ").trim() + ")";
+                result += "(" + formatTokens(inner, indent + 1).trim() + ")";
             } else if (isComplex(tokens, i, "(", ")")) {
                 result += "(\n" + formatTokens(inner, indent + 1) + "\n" + tabs + ")";
             } else {
