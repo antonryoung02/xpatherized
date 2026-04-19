@@ -1,17 +1,47 @@
 import * as vscode from "vscode";
 
 const objectIdMap: Record<string, string> = {
-    "1": "Entity",
-    "2": "License",
-    "17": "Address",
+    1: "Entity",
+    2: "License",
+    3: "Project",
+    7: "Correspondence",
+    10: "Exam",
+    11: "Association",
+    13: "Task",
+    14: "History",
+    15: "WorkAssignment",
+    16: "WorkTime",
+    17: "Address",
+    18: "Invoice",
+    19: "EntityName",
+    20: "ExamSitting",
+    22: "Document",
+    23: "Payment",
+    24: "Incoming",
+    25: "KPI",
+    31: "Appointment",
+    33: "Allegation",
+    34: "Command",
+    35: "ObjectPropertyValue",
+    37: "ObjectProperty",
+    38: "ObjectType",
+    39: "Report",
+    40: "Query",
+    41: "Web",
+    42: "WebResource",
+    43: "Topic",
+    44: "BusinessProcess",
+    47: "ProjectRequirement",
+    48: "ProcessStep",
+    49: "MetaAssociation",
 };
-
-const objectPkMap: Record<string, string> = {};
 
 export class XPathHoverProvider implements vscode.HoverProvider {
     provideHover(document: vscode.TextDocument, position: vscode.Position): vscode.Hover | null {
         const range = document.getWordRangeAtPosition(position, /\d+/);
-        if (!range) return null;
+        if (!range) {
+            return null;
+        }
 
         const number = document.getText(range);
         const lineText = document.lineAt(position.line).text;
@@ -23,22 +53,9 @@ export class XPathHoverProvider implements vscode.HoverProvider {
             lines.push(`**ObjectID ${number}:** ${objectIdMap[number]}`);
         }
 
-        if (/@ObjectPK\s*=\s*$/.test(beforeNumber) && objectPkMap[number]) {
-            lines.push(`**ObjectPK ${number}:** ${objectPkMap[number]}`);
+        if (lines.length === 0) {
+            return null;
         }
-
-        if (/@ActionTypeID\s*=\s*$/.test(beforeNumber)) {
-            const actionTypes: Record<string, string> = {
-                "1": "Append",
-                "2": "Update",
-                "3": "Delete",
-            };
-            if (actionTypes[number]) {
-                lines.push(`**ActionTypeID ${number}:** ${actionTypes[number]}`);
-            }
-        }
-
-        if (lines.length === 0) return null;
         return new vscode.Hover(new vscode.MarkdownString(lines.join("\n\n")));
     }
 }

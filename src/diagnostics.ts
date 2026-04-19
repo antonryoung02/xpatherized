@@ -4,7 +4,9 @@ export function createDiagnostics(
     document: vscode.TextDocument,
     collection: vscode.DiagnosticCollection,
 ): void {
-    if (document.languageId !== "xpath") return;
+    if (document.languageId !== "xpath") {
+        return;
+    }
 
     const diagnostics: vscode.Diagnostic[] = [];
     const text = document.getText();
@@ -20,7 +22,9 @@ export function createDiagnostics(
         const ch = text[i];
 
         if (inString) {
-            if (ch === stringChar) inString = false;
+            if (ch === stringChar) {
+                inString = false;
+            }
             continue;
         }
 

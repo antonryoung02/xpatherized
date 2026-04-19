@@ -9,17 +9,20 @@ export function format(document: vscode.TextDocument): vscode.TextEdit[] {
 
 function tokenize(xpath: string): string[] {
     const regex =
-        /(not(?=\s*\()|\[|\]|\(|\)|and\b|or\b|\/\/|\/|@[\w-]+|[\w.\-:*]+|=|!=|<=|>=|<|>|,|"[^"]*"|'[^']*')/g;
+        /(\(![^!]*!\)|not(?=\s*\()|\[|\]|\(|\)|and\b|or\b|\/\/|\/|@[\w-]+|[\w.\-:*]+|=|!=|<=|>=|<|>|,|"[^"]*"|'[^']*')/g;
     return xpath.match(regex)?.filter((t) => t.trim() !== "") ?? [];
 }
 
 function findClosingBracket(tokens: string[], start: number, open: string, close: string): number {
     let depth = 0;
     for (let i = start; i < tokens.length; i++) {
-        if (tokens[i] === open) depth++;
-        else if (tokens[i] === close) {
+        if (tokens[i] === open) {
+            depth++;
+        } else if (tokens[i] === close) {
             depth--;
-            if (depth === 0) return i;
+            if (depth === 0) {
+                return i;
+            }
         }
     }
     return -1;
@@ -27,9 +30,13 @@ function findClosingBracket(tokens: string[], start: number, open: string, close
 
 function isComplex(tokens: string[], start: number, open: string, close: string): boolean {
     const end = findClosingBracket(tokens, start, open, close);
-    if (end === -1) return false;
+    if (end === -1) {
+        return false;
+    }
     for (let i = start + 1; i < end; i++) {
-        if (tokens[i] === "and" || tokens[i] === "or") return true;
+        if (tokens[i] === "and" || tokens[i] === "or") {
+            return true;
+        }
     }
     return false;
 }

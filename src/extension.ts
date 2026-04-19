@@ -4,6 +4,7 @@ import { minify } from "./minify";
 import { XPathSemanticTokensProvider, legend } from "./semanticTokens";
 import { XPathHoverProvider } from "./hover";
 import { createDiagnostics } from "./diagnostics";
+import { provideCompletionSuggestions } from "./completionSuggestions";
 
 export function activate(context: vscode.ExtensionContext) {
     const diagnosticCollection = vscode.languages.createDiagnosticCollection("xpath");
@@ -28,7 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     const formatAndSave = vscode.commands.registerCommand("xpatherized.formatAndSave", async () => {
         const editor = vscode.window.activeTextEditor;
-        if (!editor || editor.document.languageId !== "xpath") return;
+        if (!editor || editor.document.languageId !== "xpath") {
+            return;
+        }
         const edits = format(editor.document);
         if (edits.length > 0) {
             const edit = new vscode.WorkspaceEdit();
@@ -54,6 +57,10 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.languages.registerHoverProvider({ language: "xpath" }, new XPathHoverProvider()),
     );
+
+    vscode.languages.registerCompletionItemProvider("xpath", {
+        provideCompletionItems: () => provideCompletionSuggestions(),
+    });
 }
 
 export function deactivate() {}

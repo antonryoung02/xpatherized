@@ -2,16 +2,16 @@
   "name": "xpatherized",
   "displayName": "XPatherized",
   "description": "Formatting and syntax highlighting for xpath queries",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.105.0"
   },
   "categories": [
     "Other"
   ],
-"activationEvents": [
+  "activationEvents": [
     "onLanguage:xpath"
-],
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -19,40 +19,59 @@
         "command": "xpatherized.minify",
         "title": "XPath: Minify XPath"
       }
-    ],  
-    "languages": [
-    {
-      "id": "xpath",
-      "extensions": [".xpath"]
-    }
-  ],
-      "keybindings": [
-        {
-            "command": "xpatherized.formatAndSave",
-            "key": "cmd+s",
-            "when": "editorLangId == xpath"
-        },
-        {
-            "command": "xpatherized.formatAndSave",
-            "key": "ctrl+s",
-            "when": "editorLangId == xpath"
-        }
     ],
-"semanticTokenScopes": [
-    {
+    "languages": [
+      {
+        "id": "xpath",
+        "extensions": [
+          ".xpath"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "xpatherized.formatAndSave",
+        "key": "cmd+s",
+        "when": "editorLangId == xpath"
+      },
+      {
+        "command": "xpatherized.formatAndSave",
+        "key": "ctrl+s",
+        "when": "editorLangId == xpath"
+      }
+    ],
+    "semanticTokenScopes": [
+      {
         "language": "xpath",
         "scopes": {
-            "keyword": ["keyword.control.xpath"],
-            "function": ["entity.name.function.xpath"],
-            "operator": ["keyword.operator.comparison.xpath"],
-            "string": ["string.quoted.xpath"],
-            "variable": ["variable.other.attribute.xpath"],
-            "number": ["constant.numeric.xpath"],
-            "class": ["entity.name.class.xpath"],
-            "punctuation": ["punctuation.definition.bracket.xpath"]
+          "keyword": [
+            "keyword.control.xpath"
+          ],
+          "function": [
+            "entity.name.function.xpath"
+          ],
+          "operator": [
+            "keyword.operator.comparison.xpath"
+          ],
+          "string": [
+            "string.quoted.xpath"
+          ],
+          "variable": [
+            "variable.other.attribute.xpath"
+          ],
+          "number": [
+            "constant.numeric.xpath"
+          ],
+          "class": [
+            "entity.name.class.xpath"
+          ],
+          "punctuation": [
+            "punctuation.definition.bracket.xpath"
+          ]
         }
-    }
-]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -70,15 +89,15 @@
     "publish": "vsce package"
   },
   "devDependencies": {
-    "@types/vscode": "^1.105.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.54.0",
-    "eslint": "^9.39.2",
+    "@types/vscode": "^1.105.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.9.3",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "typescript-eslint": "^8.54.0"
   }
 }
